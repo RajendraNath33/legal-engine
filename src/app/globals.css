@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-serif: "Georgia", "Times New Roman", serif;
+}
+
+html, body {
+  font-family: var(--font-sans);
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.light body {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(251, 191, 36, 0.2);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(251, 191, 36, 0.4); }
+
+/* Serif font for draft text */
+.font-legal {
+  font-family: var(--font-serif);
+  line-height: 1.7;
+}
+
+/* subtle shine for gold accents */
+.gold-text {
+  background: linear-gradient(120deg, #fcd34d 0%, #f59e0b 50%, #b45309 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card {
+  @apply rounded-2xl border border-slate-800/70 bg-slate-900/60 backdrop-blur-sm shadow-xl shadow-slate-950/40;
+}
+
+html.light .card {
+  background: rgba(255,255,255,0.85);
+  border-color: rgb(226 232 240);
+  box-shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.1);
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-2 text-sm font-semibold text-slate-950 shadow-md shadow-amber-900/20 transition hover:from-amber-400 hover:to-amber-500 disabled:opacity-50 disabled:pointer-events-none;
+}
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700/80 bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-amber-500/40 hover:text-amber-200;
+}
+html.light .btn-ghost {
+  background: white;
+  border-color: rgb(226 232 240);
+  color: rgb(30 41 59);
+}
+
+.input {
+  @apply w-full rounded-lg border border-slate-700/80 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-amber-500/60 focus:ring-2 focus:ring-amber-500/20;
+}
+html.light .input {
+  background: white;
+  border-color: rgb(226 232 240);
+  color: rgb(15 23 42);
+}
+
+.label {
+  @apply mb-1 block text-xs font-medium uppercase tracking-wider text-slate-400;
+}
+
+.chip {
+  @apply inline-flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-0.5 text-[11px] font-medium text-amber-300;
+}
+
+.tab {
+  @apply flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:text-amber-200 data-[active=true]:bg-amber-500/15 data-[active=true]:text-amber-200 data-[active=true]:ring-1 data-[active=true]:ring-amber-500/30;
+}
+
+/* Mic pulse */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+  70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+.recording { animation: pulse-ring 1.4s infinite; }
