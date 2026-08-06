@@ -70,8 +70,14 @@ export default function Sidebar() {
           </span>
           <span className="text-xs text-slate-500">Toggle</span>
         </button>
-        <div className="pt-1 text-center text-[10px] uppercase tracking-widest text-slate-600">
-          © LegalThesis.ai • For Indian Jurisdiction
+        <div className="pt-3 flex flex-col items-center gap-2 text-[10px] uppercase tracking-widest text-slate-500">
+          <div className="flex gap-3 flex-wrap justify-center">
+            <Link href="/about" className="hover:text-amber-300 transition">About</Link>
+            <Link href="/terms" className="hover:text-amber-300 transition">Terms</Link>
+            <Link href="/privacy" className="hover:text-amber-300 transition">Privacy</Link>
+            <Link href="/refund" className="hover:text-amber-300 transition">Refund Policy</Link>
+          </div>
+          <div className="mt-1">Vidhi Mitra - Divya Seva CSC Kendra</div>
         </div>
       </div>
     </aside>

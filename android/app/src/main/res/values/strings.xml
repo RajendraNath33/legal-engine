@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Vidhi Mitra</string>
+    <string name="title_activity_main">Vidhi Mitra</string>
+    <string name="package_name">com.vidhi.mitra</string>
+    <string name="custom_url_scheme">com.vidhi.mitra</string>
+</resources>

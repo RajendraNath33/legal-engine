@@ -1,8 +1,8 @@
 export type DraftTemplate = {
   id: string;
   name: string;
-  forum: "Supreme Court" | "High Court" | "District Court" | "Consumer Forum" | "Tribunal" | "Notice" | "Bail";
-  category: "Civil" | "Criminal" | "Writ" | "Notice" | "Consumer" | "Bail";
+  forum: "Supreme Court" | "High Court" | "District Court" | "Consumer Forum" | "Tribunal" | "Notice" | "Bail" | "General" | "Agreement";
+  category: "Civil" | "Criminal" | "Writ" | "Notice" | "Consumer" | "Bail" | "General" | "Agreement";
   description: string;
   fields: { key: string; label: string; type: "text" | "number" | "textarea" | "date"; placeholder?: string }[];
 };
@@ -100,6 +100,49 @@ export const DRAFT_TEMPLATES: DraftTemplate[] = [
       { key: "lowerCourt", label: "Lower Court / Tribunal Order", type: "text", placeholder: "High Court order dated..." },
       { key: "questionOfLaw", label: "Question of Law / Substantial Issue", type: "textarea" },
       { key: "grounds", label: "Grounds", type: "textarea" },
+    ],
+  },
+  {
+    id: "csc-affidavit",
+    name: "सामान्य शपथ पत्र (General Affidavit)",
+    forum: "General" as any,
+    category: "General" as any,
+    description: "आय, जाति, निवास या नाम सुधार के लिए बेसिक शपथ पत्र।",
+    fields: [
+      { key: "deponentName", label: "शपथकर्ता का नाम", type: "text" },
+      { key: "fatherName", label: "पिता/पति का नाम", type: "text" },
+      { key: "age", label: "उम्र", type: "number" },
+      { key: "address", label: "पूरा पता", type: "textarea" },
+      { key: "purpose", label: "शपथ पत्र का उद्देश्य (जैसे: आय प्रमाण पत्र हेतु)", type: "text" },
+    ],
+  },
+  {
+    id: "csc-rent-agreement",
+    name: "किरायानामा (Rent Agreement - 11 Months)",
+    forum: "Agreement" as any,
+    category: "Civil",
+    description: "मकान या दुकान किराये पर देने के लिए 11 महीने का स्टैंडर्ड एग्रीमेंट।",
+    fields: [
+      { key: "landlordName", label: "मकान मालिक (प्रथम पक्ष) का नाम", type: "text" },
+      { key: "tenantName", label: "किरायेदार (द्वितीय पक्ष) का नाम", type: "text" },
+      { key: "propertyAddress", label: "किराये की संपत्ति का पता", type: "textarea" },
+      { key: "rentAmount", label: "मासिक किराया (रुपये में)", type: "number", placeholder: "5000" },
+      { key: "securityDeposit", label: "सिक्योरिटी जमा (रुपये में)", type: "number" },
+      { key: "startDate", label: "किराया शुरू होने की तारीख", type: "date" },
+    ],
+  },
+  {
+    id: "csc-police-complaint",
+    name: "पुलिस शिकायत (Police Complaint)",
+    forum: "Notice" as any,
+    category: "Criminal",
+    description: "दस्तावेज़ गुम होने या धोखाधड़ी की शिकायत दर्ज कराने के लिए।",
+    fields: [
+      { key: "stationName", label: "थाना प्रभारी / पुलिस स्टेशन का नाम", type: "text", placeholder: "SHO, हल्द्वानी" },
+      { key: "complainantName", label: "शिकायतकर्ता का नाम", type: "text" },
+      { key: "contactNumber", label: "मोबाइल नंबर", type: "text" },
+      { key: "incidentDate", label: "घटना की तारीख", type: "date" },
+      { key: "incidentDetails", label: "घटना का पूरा विवरण", type: "textarea" },
     ],
   },
 ];
@@ -989,3 +1032,78 @@ export const QUESTION_BANK: MCQ[] = [
     explanation: "Maneka Gandhi (1978) read 'due process' fairness into Article 21 and wove the 'golden triangle' Arts 14-19-21.",
   },
 ];
+
+export function generateCscAffidavit(inputs: Record<string, string>): string {
+  return `समक्ष: सक्षम अधिकारी / नोटरी महोदय
+
+शपथ पत्र (AFFIDAVIT)
+
+मैं, ${inputs.deponentName || "[शपथकर्ता का नाम]"}, उम्र लगभग ${inputs.age || "[उम्र]"} वर्ष, पुत्र/पत्नी श्री ${inputs.fatherName || "[पिता/पति का नाम]"}, निवासी ${inputs.address || "[पूरा पता]"}, निम्नलिखित कथन शपथ पूर्वक बयान करता/करती हूँ:
+
+1. यह कि मैं उपरोक्त पते का स्थायी निवासी हूँ और भारत का नागरिक हूँ।
+2. यह कि मेरे द्वारा दी गई सभी जानकारी पूर्णतः सत्य है।
+3. यह कि मुझे यह शपथ पत्र ${inputs.purpose || "[उद्देश्य]"} के लिए प्रस्तुत करना आवश्यक है।
+
+मैं ईश्वर की शपथ लेकर कहता/करती हूँ कि उपरोक्त कथन मेरी निजी जानकारी में एकदम सत्य और सही हैं। इसमें कुछ भी छिपाया नहीं गया है। ईश्वर मेरी मदद करें।
+
+दिनांक: _________________
+स्थान: _________________
+
+                                                              हस्ताक्षर (शपथकर्ता)
+                                                              नाम: ${inputs.deponentName || ""}
+`;
+}
+
+export function generateCscRentAgreement(inputs: Record<string, string>): string {
+  const amount = Number(inputs.rentAmount || 0).toLocaleString("en-IN");
+  const security = Number(inputs.securityDeposit || 0).toLocaleString("en-IN");
+  return `किरायानामा (RENT AGREEMENT)
+
+यह किरायानामा आज दिनांक ________________ को निम्न पक्षों के बीच निष्पादित किया गया:
+
+प्रथम पक्ष (मकान मालिक): ${inputs.landlordName || "[मकान मालिक का नाम]"}
+द्वितीय पक्ष (किरायेदार): ${inputs.tenantName || "[किरायेदार का नाम]"}
+
+यह कि प्रथम पक्ष संपत्ति ${inputs.propertyAddress || "[संपत्ति का पता]"} का पूर्ण स्वामी है। प्रथम पक्ष ने अपनी इच्छा से उक्त संपत्ति द्वितीय पक्ष को किराये पर दी है, जिसकी शर्तें निम्नलिखित हैं:
+
+1. यह कि किरायेदारी दिनांक ${inputs.startDate || "[तारीख]"} से शुरू होकर केवल 11 महीने के लिए वैध होगी।
+2. यह कि उक्त संपत्ति का मासिक किराया ${amount}/- रुपये तय हुआ है, जिसका भुगतान द्वितीय पक्ष हर महीने की 5 तारीख तक करेगा।
+3. यह कि द्वितीय पक्ष ने प्रथम पक्ष को ${security}/- रुपये बतौर सिक्योरिटी जमा (Security Deposit) दे दिए हैं, जो बिना ब्याज के किरायेदारी खत्म होने पर वापस कर दिए जाएंगे।
+4. बिजली और पानी का बिल द्वितीय पक्ष द्वारा अलग से वहन किया जाएगा।
+
+दोनों पक्षों ने इस एग्रीमेंट को पढ़ और समझ लिया है और बिना किसी दबाव के अपने हस्ताक्षर कर दिए हैं।
+
+प्रथम पक्ष (हस्ताक्षर): ________________         द्वितीय पक्ष (हस्ताक्षर): ________________
+नाम: ${inputs.landlordName || ""}                 नाम: ${inputs.tenantName || ""}
+
+गवाह 1: ________________                        गवाह 2: ________________
+`;
+}
+
+export function generateCscPoliceComplaint(inputs: Record<string, string>): string {
+  return `सेवा में,
+श्रीमान थाना प्रभारी महोदय (SHO),
+${inputs.stationName || "[पुलिस स्टेशन का नाम और पता]"}
+
+विषय: प्रथम सूचना रिपोर्ट (FIR) / शिकायत दर्ज करने हेतु।
+
+महोदय,
+सविनय निवेदन है कि मैं ${inputs.complainantName || "[आपका नाम]"}, निवासी ____________________ का हूँ। मेरा मोबाइल नंबर ${inputs.contactNumber || "[मोबाइल नंबर]"} है।
+
+मैं आपके संज्ञान में निम्नलिखित घटना लाना चाहता/चाहती हूँ:
+दिनांक ${inputs.incidentDate || "[तारीख]"} को मेरे साथ निम्न घटना घटी:
+${inputs.incidentDetails || "[घटना का विवरण यहाँ लिखें]"}
+
+अतः आपसे विनम्र निवेदन है कि इस मामले की जांच करें और आवश्यक कानूनी कार्रवाई करते हुए मेरी रिपोर्ट दर्ज करने की कृपा करें।
+
+धन्यवाद।
+
+दिनांक: ________________
+स्थान: ________________
+
+भवदीय,
+हस्ताक्षर: ________________
+नाम: ${inputs.complainantName || ""}
+संपर्क: ${inputs.contactNumber || ""}
+`;
+}

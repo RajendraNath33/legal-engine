@@ -6,6 +6,9 @@ import {
   checkToneAndCompliance,
   generateBail,
   generateConsumerComplaint,
+  generateCscAffidavit,
+  generateCscPoliceComplaint,
+  generateCscRentAgreement,
   generateNi138Notice,
   generateSLP,
   generateWritHabeas,
@@ -56,6 +59,12 @@ export default function DraftPage() {
         output = generateWrittenStatement(inputs); break;
       case "slp-sc":
         output = generateSLP(inputs); break;
+      case "csc-affidavit":
+        output = generateCscAffidavit(inputs); break;
+      case "csc-rent-agreement":
+        output = generateCscRentAgreement(inputs); break;
+      case "csc-police-complaint":
+        output = generateCscPoliceComplaint(inputs); break;
     }
     setDraft(output);
     setDraftTitle(template.name);
