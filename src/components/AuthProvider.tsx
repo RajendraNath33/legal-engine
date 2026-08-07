@@ -19,20 +19,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!auth) {
+      console.error("AuthProvider missing auth instance");
       setLoading(false);
       return;
     }
 
+    console.error("AuthProvider starting auth listener");
     const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
+      console.error("AuthProvider onAuthStateChanged", { nextUser });
       setUser(nextUser);
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      console.log("AuthProvider unsubscribing auth listener");
+      unsubscribe();
+    };
   }, []);
 
   const signOut = async () => {
-    if (!auth) return;
+    if (!auth) {
+      console.error("AuthProvider signOut called without auth");
+      return;
+    }
+
+    console.error("AuthProvider signOut called");
     await firebaseSignOut(auth);
     router.replace("/login");
   };

@@ -16,6 +16,7 @@ const app = typeof window !== "undefined" ? (getApps().length ? getApp() : initi
 export const auth = app ? getAuth(app) : undefined as any;
 
 if (typeof window !== "undefined" && auth) {
+  console.error("firebase auth initialized", { auth });
   setPersistence(auth, browserLocalPersistence).catch((err) => {
     console.error("Failed to set Firebase auth persistence to browserLocalPersistence:", err);
     // Fail closed: sign out any authenticated session to avoid treating as logged-in

@@ -9,7 +9,9 @@ export default function RequireAuth({ children }: { children: React.ReactNode })
   const { user, loading } = useAuth();
 
   useEffect(() => {
+    console.error("RequireAuth status", { loading, user, pathname });
     if (!loading && !user && pathname !== "/login") {
+      console.error("RequireAuth redirecting to /login", { pathname });
       router.replace("/login");
     }
   }, [loading, pathname, router, user]);
@@ -19,6 +21,7 @@ export default function RequireAuth({ children }: { children: React.ReactNode })
   }
 
   if (!user && pathname !== "/login") {
+    console.error("RequireAuth rendering null because user is unauthenticated", { pathname });
     return null;
   }
 
