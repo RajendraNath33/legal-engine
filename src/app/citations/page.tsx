@@ -83,7 +83,7 @@ export default function CitationsPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex min-h-screen w-full flex-col lg:flex-row">
       <Sidebar />
       <main className="flex-1 min-w-0 overflow-x-hidden px-4 py-6 sm:px-8 sm:py-8">
         <header className="mb-6">
