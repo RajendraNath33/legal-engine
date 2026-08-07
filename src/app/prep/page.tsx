@@ -1,5 +1,6 @@
 "use client";
 import Sidebar from "@/components/Sidebar";
+export const dynamic = 'force-dynamic';
 import { useEffect, useMemo, useState } from "react";
 import { LANDMARK_CASES, QUESTION_BANK } from "@/lib/legal-engine";
 import { GraduationCap, RotateCcw, ChevronLeft, ChevronRight, CheckCircle2, XCircle, Sparkles, BrainCircuit, BookmarkCheck, Trophy } from "lucide-react";

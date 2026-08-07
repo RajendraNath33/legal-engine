@@ -1,5 +1,6 @@
 "use client";
 import Sidebar from "@/components/Sidebar";
+export const dynamic = 'force-dynamic';
 import { useMemo, useState } from "react";
 import { Upload, FileText, Sparkles, Scale, Download, Trash2, CheckCircle2, AlertCircle, GitCompare } from "lucide-react";
 import { buildComparativeReport, extractRatioFromPDFName, type ExtractedCase } from "@/lib/legal-engine";

@@ -1,5 +1,6 @@
 "use client";
 import Sidebar from "@/components/Sidebar";
+export const dynamic = 'force-dynamic';
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { generateCitation, type CitationFormat, type CitationInputType } from "@/lib/legal-engine";

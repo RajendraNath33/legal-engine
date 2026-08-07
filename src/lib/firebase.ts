@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, PhoneAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, PhoneAuthProvider, setPersistence, browserLocalPersistence, signOut } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyAo0seFFBUlpXkb8EhjCkqouBRjlJsWgBI",
@@ -14,6 +14,18 @@ const firebaseConfig = {
 const app = typeof window !== "undefined" ? (getApps().length ? getApp() : initializeApp(firebaseConfig)) : undefined;
 
 export const auth = app ? getAuth(app) : undefined as any;
+
+if (typeof window !== "undefined" && auth) {
+  setPersistence(auth, browserLocalPersistence).catch((err) => {
+    console.error("Failed to set Firebase auth persistence to browserLocalPersistence:", err);
+    // Fail closed: sign out any authenticated session to avoid treating as logged-in
+    try {
+      signOut(auth).catch(() => undefined);
+    } catch (e) {
+      /* ignore */
+    }
+  });
+}
 export const googleProvider = typeof window !== "undefined" ? new GoogleAuthProvider() : undefined as any;
 if (googleProvider) {
   googleProvider.addScope("https://www.googleapis.com/auth/drive.file");
