@@ -45,7 +45,7 @@ export default function DashboardPage() {
   return (
     <div className="flex min-h-screen w-full">
       <Sidebar />
-      <main className="flex-1 overflow-x-hidden">
+      <main className="flex-1 min-w-0 overflow-x-hidden">
         <div className="relative">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.08),transparent_60%)]" />
           <div className="relative px-4 py-6 sm:px-8 sm:py-10">

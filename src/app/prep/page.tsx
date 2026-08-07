@@ -11,7 +11,7 @@ export default function PrepPage() {
   return (
     <div className="flex min-h-screen w-full">
       <Sidebar />
-      <main className="flex-1 px-8 py-8">
+      <main className="flex-1 min-w-0 overflow-x-hidden px-4 py-6 sm:px-8 sm:py-8">
         <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
             <div className="text-xs uppercase tracking-[0.25em] text-amber-400">Module 04</div>

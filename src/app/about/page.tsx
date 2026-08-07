@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
     <div className="flex min-h-screen w-full">
       <Sidebar />
-      <main className="flex-1 px-8 py-8">
+      <main className="flex-1 min-w-0 overflow-x-hidden px-4 py-6 sm:px-8 sm:py-8">
         <header className="mb-6">
           <h1 className="text-2xl font-semibold text-slate-100 light:text-slate-900">About Us</h1>
         </header>
