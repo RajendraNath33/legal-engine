@@ -16,14 +16,25 @@ export default function RequireAuth({ children }: { children: React.ReactNode })
     }
   }, [loading, pathname, router, user]);
 
-  if (loading) {
-    return null;
-  }
-
-  if (!user && pathname !== "/login") {
-    console.error("RequireAuth rendering null because user is unauthenticated", { pathname });
-    return null;
-  }
-
-  return <>{children}</>;
+  return (
+    <>
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 9999,
+          background: "red",
+          color: "white",
+          padding: "4px",
+          fontSize: "10px",
+          pointerEvents: "none",
+        }}
+      >
+        AUTH DEBUG: loading={String(loading)} user={user ? user.uid : "null"}
+      </div>
+      {(!loading && !user && pathname !== "/login") ? null : children}
+    </>
+  );
 }
