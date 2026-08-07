@@ -1,8 +1,14 @@
+"use client";
+
 import Sidebar from "@/components/Sidebar";
-import { FileText, BrainCircuit, BookOpen, GraduationCap, ShieldCheck, Zap, Lock, Sparkles } from "lucide-react";
+import { FileText, BrainCircuit, BookOpen, GraduationCap, ShieldCheck, Zap, Lock, Sparkles, HardDrive } from "lucide-react";
 import Link from "next/link";
+import { auth } from "@/lib/firebase";
+import { useEffect, useState } from "react";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function DashboardPage() {
+  const [driveAuthUrl, setDriveAuthUrl] = useState(`${API_BASE_URL}/api/auth/google/authorize`);
   const modules = [
     {
       href: "/draft",
@@ -42,6 +48,16 @@ export default function DashboardPage() {
     },
   ];
 
+  useEffect(() => {
+    const getToken = async () => {
+      if (!auth?.currentUser) return;
+      const token = await auth.currentUser.getIdToken();
+      setDriveAuthUrl(`${API_BASE_URL}/api/auth/google/authorize?idToken=${encodeURIComponent(token)}`);
+    };
+
+    getToken();
+  }, []);
+
   return (
     <div className="flex min-h-screen w-full flex-col lg:flex-row">
       <Sidebar />
@@ -70,6 +86,12 @@ export default function DashboardPage() {
                     <Link href="/research" className="btn-ghost">
                       <BrainCircuit className="h-4 w-4" /> Analyse Cases
                     </Link>
+                    <a
+                      href={driveAuthUrl}
+                      className="btn-ghost"
+                    >
+                      <HardDrive className="h-4 w-4" /> Connect Google Drive
+                    </a>
                   </div>
                 </div>
                 <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 md:w-auto">

@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Scale, FileText, BookOpen, BrainCircuit, GraduationCap, Moon, Sun, Sparkles, ShieldCheck, Menu, X } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
+import { useAuth } from "./AuthProvider";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: Sparkles },
@@ -18,11 +19,13 @@ function SidebarBody({
   theme,
   toggle,
   onNavigate,
+  signOut,
 }: {
   pathname: string;
   theme: string;
   toggle: () => void;
   onNavigate?: () => void;
+  signOut: () => Promise<void>;
 }) {
   return (
     <>
@@ -80,6 +83,12 @@ function SidebarBody({
           </span>
           <span className="text-xs text-slate-500">Toggle</span>
         </button>
+        <button
+          onClick={() => signOut()}
+          className="flex w-full items-center justify-center rounded-lg border border-slate-800 bg-slate-900/70 px-3 py-2 text-sm font-medium text-slate-300 transition hover:border-amber-500/30 hover:text-amber-200 light:border-slate-200 light:bg-slate-50 light:text-slate-700"
+        >
+          Sign out
+        </button>
         <div className="flex flex-col items-center gap-2 pt-3 text-[10px] uppercase tracking-widest text-slate-500">
           <div className="flex flex-wrap justify-center gap-3">
             <Link href="/about" className="transition hover:text-amber-300" onClick={onNavigate}>About</Link>
@@ -97,6 +106,7 @@ function SidebarBody({
 export default function Sidebar() {
   const pathname = usePathname();
   const { theme, toggle } = useTheme();
+  const { signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -142,12 +152,12 @@ export default function Sidebar() {
               <X className="h-5 w-5" />
             </button>
           </div>
-          <SidebarBody pathname={pathname} theme={theme} toggle={toggle} onNavigate={() => setMobileOpen(false)} />
+          <SidebarBody pathname={pathname} theme={theme} toggle={toggle} onNavigate={() => setMobileOpen(false)} signOut={signOut} />
         </aside>
       </div>
 
       <aside className="hidden h-full w-full shrink-0 flex-col border-b border-amber-500/10 bg-slate-950/90 px-4 py-4 text-slate-200 dark:bg-slate-950/90 light:bg-white light:border-slate-200 light:text-slate-800 lg:flex lg:w-72 lg:border-r lg:border-b-0 lg:px-5 lg:py-6">
-        <SidebarBody pathname={pathname} theme={theme} toggle={toggle} />
+        <SidebarBody pathname={pathname} theme={theme} toggle={toggle} signOut={signOut} />
       </aside>
     </>
   );

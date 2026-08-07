@@ -49,3 +49,12 @@ export const citations = pgTable("citations", {
   formatted: text("formatted").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  firebaseUid: varchar("firebase_uid", { length: 128 }).notNull().unique(),
+  email: varchar("email", { length: 255 }),
+  phoneNumber: varchar("phone_number", { length: 50 }),
+  driveRefreshToken: text("drive_refresh_token"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
