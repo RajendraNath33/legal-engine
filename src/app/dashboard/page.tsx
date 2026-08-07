@@ -50,10 +50,10 @@ export default function DashboardPage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.08),transparent_60%)]" />
           <div className="relative px-4 py-6 sm:px-8 sm:py-10">
             {/* Hero */}
-            <section className="mb-10 rounded-3xl border border-amber-500/20 bg-gradient-to-br from-slate-900 via-slate-900/80 to-slate-950 p-8 shadow-2xl shadow-amber-900/10 light:from-white light:via-amber-50 light:to-white">
+            <section className="mb-10 rounded-3xl border border-amber-500/20 bg-gradient-to-br from-slate-900 via-slate-900/80 to-slate-950 p-5 shadow-2xl shadow-amber-900/10 sm:p-8 light:from-white light:via-amber-50 light:to-white">
               <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                 <div className="max-w-2xl">
-                  <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-300">
+                  <div className="mb-3 inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-300 sm:text-xs">
                     <Sparkles className="h-3.5 w-3.5" />
                     Legal Research • Drafting • Prep
                   </div>
@@ -72,7 +72,7 @@ export default function DashboardPage() {
                     </Link>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3 md:w-auto">
+                <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 md:w-auto">
                   <Stat icon={ShieldCheck} label="E2E Encrypted" value="SOC-ready" color="text-emerald-300" />
                   <Stat icon={Zap} label="Lightning fast" value="<2s drafts" color="text-amber-300" />
                   <Stat icon={Lock} label="Privacy-first" value="Zero-trust" color="text-sky-300" />
@@ -95,11 +95,11 @@ export default function DashboardPage() {
                     >
                       <div className={"pointer-events-none absolute inset-0 bg-gradient-to-br opacity-60 transition group-hover:opacity-100 " + m.accent} />
                       <div className="relative">
-                        <div className="mb-4 flex items-center gap-3">
-                          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-950/60 ring-1 ring-amber-500/20 light:bg-amber-50 light:ring-amber-200">
+                        <div className="mb-4 flex flex-wrap items-start gap-3 sm:items-center">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-950/60 ring-1 ring-amber-500/20 light:bg-amber-50 light:ring-amber-200">
                             <Icon className={"h-5 w-5 " + m.iconColor} strokeWidth={2} />
                           </div>
-                          <h3 className="text-lg font-semibold text-slate-100 light:text-slate-900">{m.title}</h3>
+                          <h3 className="min-w-0 text-lg font-semibold leading-tight text-slate-100 light:text-slate-900">{m.title}</h3>
                         </div>
                         <p className="text-sm leading-relaxed text-slate-400 light:text-slate-600">{m.desc}</p>
                         <ul className="mt-4 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs text-slate-300 light:text-slate-700">
@@ -129,11 +129,11 @@ export default function DashboardPage() {
 
 function Stat({ icon: Icon, label, value, color }: { icon: any; label: string; value: string; color: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-slate-800/70 bg-slate-950/40 px-4 py-3 light:border-slate-200 light:bg-white">
-      <Icon className={"h-5 w-5 " + color} strokeWidth={2} />
-      <div>
+    <div className="flex flex-col items-start gap-2 rounded-xl border border-slate-800/70 bg-slate-950/40 px-4 py-3 light:border-slate-200 light:bg-white sm:flex-row sm:items-center sm:gap-3">
+      <Icon className={"h-5 w-5 shrink-0 " + color} strokeWidth={2} />
+      <div className="min-w-0">
         <div className="text-[10px] uppercase tracking-widest text-slate-500">{label}</div>
-        <div className="text-sm font-semibold text-slate-200 light:text-slate-900">{value}</div>
+        <div className="text-sm font-semibold leading-tight text-slate-200 light:text-slate-900">{value}</div>
       </div>
     </div>
   );
