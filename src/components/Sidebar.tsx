@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Scale, FileText, BookOpen, BrainCircuit, GraduationCap, Moon, Sun, Sparkles, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Scale, FileText, BookOpen, BrainCircuit, GraduationCap, Moon, Sun, Sparkles, ShieldCheck, Menu, X } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 
 const nav = [
@@ -12,13 +13,20 @@ const nav = [
   { href: "/prep", label: "Exam Prep", icon: GraduationCap },
 ];
 
-export default function Sidebar() {
-  const pathname = usePathname();
-  const { theme, toggle } = useTheme();
-
+function SidebarBody({
+  pathname,
+  theme,
+  toggle,
+  onNavigate,
+}: {
+  pathname: string;
+  theme: string;
+  toggle: () => void;
+  onNavigate?: () => void;
+}) {
   return (
-    <aside className="flex h-full w-full shrink-0 flex-col border-b border-amber-500/10 bg-slate-950/90 px-4 py-4 text-slate-200 dark:bg-slate-950/90 light:bg-white light:border-slate-200 light:text-slate-800 lg:w-72 lg:border-r lg:border-b-0 lg:px-5 lg:py-6">
-      <Link href="/dashboard" className="group mb-4 flex items-center gap-3 lg:mb-8">
+    <>
+      <Link href="/dashboard" className="group mb-4 flex items-center gap-3 lg:mb-8" onClick={onNavigate}>
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 shadow-lg shadow-amber-500/20">
           <Scale className="h-6 w-6" strokeWidth={2.3} />
         </div>
@@ -39,6 +47,7 @@ export default function Sidebar() {
               key={n.href}
               href={n.href}
               aria-current={active ? "page" : undefined}
+              onClick={onNavigate}
               className={
                 "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition " +
                 (active
@@ -71,16 +80,75 @@ export default function Sidebar() {
           </span>
           <span className="text-xs text-slate-500">Toggle</span>
         </button>
-        <div className="pt-3 flex flex-col items-center gap-2 text-[10px] uppercase tracking-widest text-slate-500">
-          <div className="flex gap-3 flex-wrap justify-center">
-            <Link href="/about" className="hover:text-amber-300 transition">About</Link>
-            <Link href="/terms" className="hover:text-amber-300 transition">Terms</Link>
-            <Link href="/privacy" className="hover:text-amber-300 transition">Privacy</Link>
-            <Link href="/refund" className="hover:text-amber-300 transition">Refund Policy</Link>
+        <div className="flex flex-col items-center gap-2 pt-3 text-[10px] uppercase tracking-widest text-slate-500">
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link href="/about" className="transition hover:text-amber-300" onClick={onNavigate}>About</Link>
+            <Link href="/terms" className="transition hover:text-amber-300" onClick={onNavigate}>Terms</Link>
+            <Link href="/privacy" className="transition hover:text-amber-300" onClick={onNavigate}>Privacy</Link>
+            <Link href="/refund" className="transition hover:text-amber-300" onClick={onNavigate}>Refund Policy</Link>
           </div>
           <div className="mt-1">Vidhi Mitra - Divya Seva CSC Kendra</div>
         </div>
       </div>
-    </aside>
+    </>
+  );
+}
+
+export default function Sidebar() {
+  const pathname = usePathname();
+  const { theme, toggle } = useTheme();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  return (
+    <>
+      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-amber-500/10 bg-slate-950/95 px-4 py-3 backdrop-blur lg:hidden">
+        <Link href="/dashboard" className="flex items-center gap-2 text-sm font-semibold text-amber-300">
+          <Scale className="h-5 w-5" />
+          <span>Legal Mitra</span>
+        </Link>
+        <button
+          type="button"
+          aria-label="Open navigation menu"
+          onClick={() => setMobileOpen(true)}
+          className="rounded-lg border border-slate-800 bg-slate-900/80 p-2 text-slate-200 transition hover:border-amber-500/30 hover:text-amber-200"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+      </div>
+
+      <div className={`fixed inset-0 z-50 transition lg:hidden ${mobileOpen ? "pointer-events-auto" : "pointer-events-none"}`}>
+        <button
+          type="button"
+          aria-label="Close navigation menu"
+          className={`absolute inset-0 bg-slate-950/75 transition ${mobileOpen ? "opacity-100" : "opacity-0"}`}
+          onClick={() => setMobileOpen(false)}
+        />
+        <aside className={`relative flex h-full w-[85vw] max-w-sm flex-col border-r border-amber-500/10 bg-slate-950/95 px-4 py-4 text-slate-200 shadow-2xl transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`}>
+          <div className="mb-4 flex items-center justify-between">
+            <Link href="/dashboard" className="flex items-center gap-2 text-sm font-semibold text-amber-300" onClick={() => setMobileOpen(false)}>
+              <Scale className="h-5 w-5" />
+              <span>Legal Mitra</span>
+            </Link>
+            <button
+              type="button"
+              aria-label="Close navigation menu"
+              onClick={() => setMobileOpen(false)}
+              className="rounded-lg border border-slate-800 bg-slate-900/80 p-2 text-slate-200 transition hover:border-amber-500/30 hover:text-amber-200"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          <SidebarBody pathname={pathname} theme={theme} toggle={toggle} onNavigate={() => setMobileOpen(false)} />
+        </aside>
+      </div>
+
+      <aside className="hidden h-full w-full shrink-0 flex-col border-b border-amber-500/10 bg-slate-950/90 px-4 py-4 text-slate-200 dark:bg-slate-950/90 light:bg-white light:border-slate-200 light:text-slate-800 lg:flex lg:w-72 lg:border-r lg:border-b-0 lg:px-5 lg:py-6">
+        <SidebarBody pathname={pathname} theme={theme} toggle={toggle} />
+      </aside>
+    </>
   );
 }
