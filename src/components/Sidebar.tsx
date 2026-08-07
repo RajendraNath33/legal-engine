@@ -17,14 +17,14 @@ export default function Sidebar() {
   const { theme, toggle } = useTheme();
 
   return (
-    <aside className="flex h-full w-72 flex-col border-r border-amber-500/10 bg-slate-950/90 px-5 py-6 text-slate-200 dark:bg-slate-950/90 light:bg-white light:border-slate-200 light:text-slate-800">
-      <Link href="/dashboard" className="group mb-8 flex items-center gap-3">
+    <aside className="flex h-full w-full shrink-0 flex-col border-b border-amber-500/10 bg-slate-950/90 px-4 py-4 text-slate-200 dark:bg-slate-950/90 light:bg-white light:border-slate-200 light:text-slate-800 lg:w-72 lg:border-r lg:border-b-0 lg:px-5 lg:py-6">
+      <Link href="/dashboard" className="group mb-4 flex items-center gap-3 lg:mb-8">
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 shadow-lg shadow-amber-500/20">
           <Scale className="h-6 w-6" strokeWidth={2.3} />
         </div>
         <div>
           <div className="text-base font-semibold leading-tight tracking-tight text-amber-300 group-hover:text-amber-200">
-            LegalThesis<span className="text-slate-400">.ai</span>
+            Legal Mitra
           </div>
           <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Draft • Research • Prep</div>
         </div>

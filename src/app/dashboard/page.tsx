@@ -48,7 +48,7 @@ export default function DashboardPage() {
       <main className="flex-1 overflow-x-hidden">
         <div className="relative">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.08),transparent_60%)]" />
-          <div className="relative px-8 py-10">
+          <div className="relative px-4 py-6 sm:px-8 sm:py-10">
             {/* Hero */}
             <section className="mb-10 rounded-3xl border border-amber-500/20 bg-gradient-to-br from-slate-900 via-slate-900/80 to-slate-950 p-8 shadow-2xl shadow-amber-900/10 light:from-white light:via-amber-50 light:to-white">
               <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
@@ -57,8 +57,8 @@ export default function DashboardPage() {
                     <Sparkles className="h-3.5 w-3.5" />
                     Legal Research • Drafting • Prep
                   </div>
-                  <h1 className="text-3xl font-semibold leading-tight tracking-tight text-slate-100 md:text-4xl light:text-slate-900">
-                    Welcome to <span className="gold-text">LegalThesis.ai</span>
+                  <h1 className="text-2xl font-semibold leading-tight tracking-tight text-slate-100 sm:text-3xl md:text-4xl light:text-slate-900">
+                    Welcome to <span className="gold-text">Legal Mitra</span>
                   </h1>
                   <p className="mt-3 text-base leading-relaxed text-slate-400 light:text-slate-600">
                     The all-in-one platform for Indian advocates, LLM/Ph.D. scholars, law students, and judiciary aspirants — draft smarter, research faster, and prep smarter with AI that knows Indian law.

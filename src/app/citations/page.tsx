@@ -1,6 +1,7 @@
 "use client";
 import Sidebar from "@/components/Sidebar";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 import { generateCitation, type CitationFormat, type CitationInputType } from "@/lib/legal-engine";
 import { BookOpen, Copy, CheckCircle2, Save, FileText, FileType, BookMarked, ScrollText, GraduationCap } from "lucide-react";
 
@@ -66,11 +67,17 @@ export default function CitationsPage() {
     setTimeout(() => setCopied(false), 1600);
   }
   async function save() {
-    await fetch("/api/citations", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ format, inputType: type, raw: JSON.stringify(data), formatted }),
+    const { error } = await supabase.from("citations").insert({
+      format,
+      input_type: type,
+      raw: JSON.stringify(data),
+      formatted,
     });
+    if (error) {
+      console.error(error);
+      alert("Save failed: " + error.message);
+      return;
+    }
     setSaved(true);
     setTimeout(() => setSaved(false), 1600);
   }

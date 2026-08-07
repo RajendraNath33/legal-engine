@@ -1,6 +1,7 @@
 "use client";
 import Sidebar from "@/components/Sidebar";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import {
   DRAFT_TEMPLATES,
   checkToneAndCompliance,
@@ -190,11 +191,19 @@ export default function DraftPage() {
   }
   async function saveDraft() {
     setSaveStatus("saving");
-    await fetch("/api/drafts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: draftTitle, type: template.name, content: draft, inputs, tone: "formal" }),
+    const { error } = await supabase.from("drafts").insert({
+      title: draftTitle,
+      type: template.name,
+      content: draft,
+      inputs,
+      tone: "formal",
     });
+    if (error) {
+      console.error(error);
+      setSaveStatus("idle");
+      alert("Save failed: " + error.message);
+      return;
+    }
     setSaveStatus("saved");
     setTimeout(() => setSaveStatus("idle"), 1800);
   }
