@@ -7,6 +7,12 @@ const config: CapacitorConfig = {
   server: {
     url: 'https://vidhi-mitra.shilpshakti.org.in',
     cleartext: false
+  },
+  plugins: {
+    FirebaseAuthentication: {
+      skipNativeAuth: false,
+      providers: ['google.com']
+    }
   }
 };
 

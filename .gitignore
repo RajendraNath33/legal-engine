@@ -2,3 +2,6 @@ node_modules/
 .next/
 out/
 .env
+.idea/
+android/.idea/
+android/app/google-services.json

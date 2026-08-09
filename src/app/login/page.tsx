@@ -6,6 +6,8 @@ import { auth, googleProvider } from "@/lib/firebase";
 import { useAuth } from "@/components/AuthProvider";
 import { ShieldCheck, Phone, LogIn } from "lucide-react";
 import { API_BASE_URL } from "@/lib/config";
+import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
+import { GoogleAuthProvider as GoogleAuthProviderCred, signInWithCredential } from "firebase/auth";
 
 const SHOW_PHONE_LOGIN = false;
 
@@ -88,7 +90,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = async () => {
-    if (!auth || !googleProvider) {
+    if (!auth) {
       setStatus("Firebase is not available in this environment");
       return;
     }
@@ -96,8 +98,14 @@ export default function LoginPage() {
     setBusy(true);
     setStatus("Connecting to Google...");
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
+      const result = await FirebaseAuthentication.signInWithGoogle();
+      const idToken = result.credential?.idToken;
+      if (!idToken) {
+        throw new Error("No ID token received from native Google sign-in");
+      }
+      const credential = GoogleAuthProviderCred.credential(idToken);
+      const jsResult = await signInWithCredential(auth, credential);
+      const user = jsResult.user;
       const token = await user.getIdToken();
       await fetch(`${API_BASE_URL}/api/auth/sync`, {
         method: "POST",
