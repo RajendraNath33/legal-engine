@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Scale, FileText, BookOpen, BrainCircuit, GraduationCap, Moon, Sun, Sparkles, ShieldCheck, Menu, X } from "lucide-react";
@@ -30,8 +31,8 @@ function SidebarBody({
   return (
     <>
       <Link href="/dashboard" className="group mb-4 flex items-center gap-3 lg:mb-8" onClick={onNavigate}>
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 shadow-lg shadow-amber-500/20">
-          <Scale className="h-6 w-6" strokeWidth={2.3} />
+        <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl shadow-lg shadow-amber-500/20">
+          <Image src="/Outer-logo.jpeg" alt="Legal Mitra" width={44} height={44} className="h-full w-full object-cover" />
         </div>
         <div>
           <div className="text-base font-semibold leading-tight tracking-tight text-amber-300 group-hover:text-amber-200">

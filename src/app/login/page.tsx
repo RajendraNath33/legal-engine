@@ -5,6 +5,7 @@ import { signInWithPopup, signInWithPhoneNumber, ConfirmationResult, RecaptchaVe
 import { auth, googleProvider } from "@/lib/firebase";
 import { useAuth } from "@/components/AuthProvider";
 import { ShieldCheck, Phone, LogIn } from "lucide-react";
+import Image from "next/image";
 import { API_BASE_URL } from "@/lib/config";
 import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
 import { GoogleAuthProvider as GoogleAuthProviderCred, signInWithCredential } from "firebase/auth";
@@ -179,12 +180,8 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-10 text-slate-200">
       <div className="w-full max-w-md rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-amber-900/10">
         <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950">
-            <ShieldCheck className="h-6 w-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-semibold text-slate-100">Legal Mitra</h1>
-            <p className="text-sm text-slate-400">Secure sign in for your legal workspace</p>
+          <div className="flex w-full justify-center">
+            <Image src="/Inner-logo.jpeg" alt="Legal Mitra" width={220} height={220} className="h-auto w-48 rounded-2xl" />
           </div>
         </div>
 
