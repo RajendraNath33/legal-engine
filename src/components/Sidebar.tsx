@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Scale, FileText, BookOpen, BrainCircuit, GraduationCap, Moon, Sun, Sparkles, ShieldCheck, Menu, X } from "lucide-react";
+import { Scale, FileText, BookOpen, BrainCircuit, GraduationCap, Moon, Sun, Sparkles, ShieldCheck, Menu, X, Library } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { useAuth } from "./AuthProvider";
 
@@ -21,12 +21,14 @@ function SidebarBody({
   toggle,
   onNavigate,
   signOut,
+  isAdmin,
 }: {
   pathname: string;
   theme: string;
   toggle: () => void;
   onNavigate?: () => void;
   signOut: () => Promise<void>;
+  isAdmin: boolean;
 }) {
   return (
     <>
@@ -65,6 +67,22 @@ function SidebarBody({
           );
         })}
       </nav>
+
+      {isAdmin && (
+        <Link
+          href="/admin"
+          onClick={onNavigate}
+          className={
+            "group mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition " +
+            (pathname === "/admin" || pathname?.startsWith("/admin/")
+              ? "bg-amber-500/15 text-amber-200 ring-1 ring-amber-500/30"
+              : "text-slate-400 hover:bg-slate-800/60 hover:text-amber-200 light:hover:bg-slate-100 light:text-slate-600")
+          }
+        >
+          <Library className={"h-4.5 w-4.5 " + (pathname === "/admin" || pathname?.startsWith("/admin/") ? "text-amber-300" : "text-slate-500 group-hover:text-amber-300")} strokeWidth={1.8} />
+          <span className="font-medium">Admin Panel</span>
+        </Link>
+      )}
 
       <div className="mt-4 space-y-3">
         <div className="rounded-xl border border-amber-500/10 bg-slate-900/60 p-3 text-xs text-slate-400 light:bg-slate-100 light:border-slate-200">
@@ -107,7 +125,7 @@ function SidebarBody({
 export default function Sidebar() {
   const pathname = usePathname();
   const { theme, toggle } = useTheme();
-  const { signOut } = useAuth();
+  const { signOut, isAdmin } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -153,12 +171,12 @@ export default function Sidebar() {
               <X className="h-5 w-5" />
             </button>
           </div>
-          <SidebarBody pathname={pathname} theme={theme} toggle={toggle} onNavigate={() => setMobileOpen(false)} signOut={signOut} />
+          <SidebarBody pathname={pathname} theme={theme} toggle={toggle} onNavigate={() => setMobileOpen(false)} signOut={signOut} isAdmin={isAdmin} />
         </aside>
       </div>
 
       <aside className="hidden h-full w-full shrink-0 flex-col border-b border-amber-500/10 bg-slate-950/90 px-4 py-4 text-slate-200 dark:bg-slate-950/90 light:bg-white light:border-slate-200 light:text-slate-800 lg:flex lg:w-72 lg:border-r lg:border-b-0 lg:px-5 lg:py-6">
-        <SidebarBody pathname={pathname} theme={theme} toggle={toggle} signOut={signOut} />
+        <SidebarBody pathname={pathname} theme={theme} toggle={toggle} signOut={signOut} isAdmin={isAdmin} />
       </aside>
     </>
   );

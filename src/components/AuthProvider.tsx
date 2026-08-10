@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 interface AuthContextValue {
   user: User | null;
   loading: boolean;
+  isAdmin: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -48,7 +49,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.replace("/login");
   };
 
-  const value = useMemo(() => ({ user, loading, signOut }), [user, loading, signOut]);
+  const isAdmin = useMemo(() => {
+    const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+    return Boolean(user?.email && adminEmail && user.email.toLowerCase() === adminEmail.toLowerCase());
+  }, [user]);
+
+  const value = useMemo(
+    () => ({ user, loading, isAdmin, signOut }),
+    [user, loading, isAdmin, signOut]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
