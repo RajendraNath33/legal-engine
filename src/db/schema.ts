@@ -58,3 +58,14 @@ export const users = pgTable("users", {
   driveRefreshToken: text("drive_refresh_token"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const judgmentPdfs = pgTable("judgment_pdfs", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  fileName: varchar("file_name", { length: 255 }).notNull(),
+  storagePath: varchar("storage_path", { length: 500 }).notNull(),
+  fileSize: integer("file_size").notNull(),
+  extractedText: text("extracted_text"),
+  uploadedByEmail: varchar("uploaded_by_email", { length: 255 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
