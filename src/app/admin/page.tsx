@@ -81,6 +81,22 @@ export default function AdminPage() {
     }
   };
 
+  const handleView = async (id: number) => {
+    if (!user) return;
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch(`/api/judgments/${id}`, {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (!res.ok) throw new Error("PDF load nahi ho payi");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+    } catch {
+      setError("PDF khulne mein error aayi.");
+    }
+  };
+
   const handleDelete = async (id: number) => {
     if (!user) return;
     if (!confirm("Ye judgment PDF delete kar dein? Ye sabhi users ke liye hat jayegi.")) return;
@@ -166,18 +182,16 @@ export default function AdminPage() {
                       key={j.id}
                       className="flex items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2.5 light:border-slate-200 light:bg-slate-50"
                     >
-                      <a
-                        href={`/api/judgments/${j.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex min-w-0 flex-1 items-center gap-3 text-sm text-slate-200 hover:text-amber-300 light:text-slate-800"
+                      <button
+                        onClick={() => handleView(j.id)}
+                        className="flex min-w-0 flex-1 items-center gap-3 text-left text-sm text-slate-200 hover:text-amber-300 light:text-slate-800"
                       >
                         <FileText className="h-4 w-4 shrink-0 text-amber-400" />
                         <span className="truncate">
                           {j.title}
                           <span className="ml-2 text-xs text-slate-500">{formatSize(j.fileSize)}</span>
                         </span>
-                      </a>
+                      </button>
                       <button
                         onClick={() => handleDelete(j.id)}
                         disabled={deletingId === j.id}

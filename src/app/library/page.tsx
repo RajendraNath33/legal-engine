@@ -43,6 +43,22 @@ export default function LibraryPage() {
     loadJudgments();
   }, [loadJudgments]);
 
+  const handleView = async (id: number) => {
+    if (!user) return;
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch(`/api/judgments/${id}`, {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (!res.ok) return;
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+    } catch {
+      /* noop */
+    }
+  };
+
   return (
     <RequireAuth>
       <div className="flex min-h-screen w-full flex-col lg:flex-row">
@@ -73,18 +89,16 @@ export default function LibraryPage() {
                 <ul className="space-y-2">
                   {judgments.map((j) => (
                     <li key={j.id}>
-                      <a
-                        href={`/api/judgments/${j.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2.5 text-sm text-slate-200 transition hover:border-amber-500/30 hover:text-amber-300 light:border-slate-200 light:bg-slate-50 light:text-slate-800"
+                      <button
+                        onClick={() => handleView(j.id)}
+                        className="flex w-full items-center gap-3 rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2.5 text-left text-sm text-slate-200 transition hover:border-amber-500/30 hover:text-amber-300 light:border-slate-200 light:bg-slate-50 light:text-slate-800"
                       >
                         <FileText className="h-4 w-4 shrink-0 text-amber-400" />
                         <span className="truncate">
                           {j.title}
                           <span className="ml-2 text-xs text-slate-500">{formatSize(j.fileSize)}</span>
                         </span>
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
