@@ -62,6 +62,7 @@ export const users = pgTable("users", {
 export const judgmentPdfs = pgTable("judgment_pdfs", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
+  category: varchar("category", { length: 50 }).notNull().default("judgment"),
   fileName: varchar("file_name", { length: 255 }).notNull(),
   storagePath: varchar("storage_path", { length: 500 }).notNull(),
   fileSize: integer("file_size").notNull(),

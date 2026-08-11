@@ -1,14 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import RequireAdmin from "@/components/RequireAdmin";
 import { useAuth } from "@/components/AuthProvider";
 import { Library, Upload, Trash2, FileText, Loader2 } from "lucide-react";
+import { DOCUMENT_CATEGORIES, categoryLabel } from "@/lib/document-categories";
 
 interface JudgmentRow {
   id: number;
   title: string;
+  category: string;
   fileName: string;
   fileSize: number;
   createdAt: string;
@@ -24,10 +26,12 @@ export default function AdminPage() {
   const [judgments, setJudgments] = useState<JudgmentRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState<string>(DOCUMENT_CATEGORIES[0].value);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [filter, setFilter] = useState<string>("all");
 
   const loadJudgments = useCallback(async () => {
     if (!user) return;
@@ -59,6 +63,7 @@ export default function AdminPage() {
       const idToken = await user.getIdToken();
       const formData = new FormData();
       formData.append("title", title.trim());
+      formData.append("category", category);
       formData.append("file", file);
       const res = await fetch("/api/judgments", {
         method: "POST",
@@ -99,7 +104,7 @@ export default function AdminPage() {
 
   const handleDelete = async (id: number) => {
     if (!user) return;
-    if (!confirm("Ye judgment PDF delete kar dein? Ye sabhi users ke liye hat jayegi.")) return;
+    if (!confirm("Ye document delete kar dein? Ye sabhi users ke liye hat jayegi.")) return;
     setDeletingId(id);
     try {
       const idToken = await user.getIdToken();
@@ -113,6 +118,11 @@ export default function AdminPage() {
     }
   };
 
+  const filteredJudgments = useMemo(() => {
+    if (filter === "all") return judgments;
+    return judgments.filter((j) => j.category === filter);
+  }, [judgments, filter]);
+
   return (
     <RequireAdmin>
       <div className="flex min-h-screen w-full flex-col lg:flex-row">
@@ -125,16 +135,30 @@ export default function AdminPage() {
                 Admin Panel
               </div>
               <h1 className="text-2xl font-semibold leading-tight tracking-tight text-slate-100 sm:text-3xl light:text-slate-900">
-                Judgment Library
+                Legal Library
               </h1>
               <p className="mt-3 text-base leading-relaxed text-slate-400 light:text-slate-600">
-                Yahan se judgment PDFs upload karein — ye sabhi users ko read-only dikhengi.
+                Yahan se judgments, bare acts, law books ya notes upload karein — ye sabhi users ko read-only dikhengi.
               </p>
             </section>
 
             <section className="mb-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6 light:border-slate-200 light:bg-white">
-              <h2 className="mb-4 text-lg font-semibold text-slate-100 light:text-slate-900">Nayi Judgment Upload Karein</h2>
+              <h2 className="mb-4 text-lg font-semibold text-slate-100 light:text-slate-900">Nayi Document Upload Karein</h2>
               <form onSubmit={handleUpload} className="space-y-4">
+                <div>
+                  <label className="mb-1 block text-sm text-slate-400 light:text-slate-600">Category</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none focus:border-amber-500/50 light:border-slate-300 light:bg-slate-50 light:text-slate-900"
+                  >
+                    {DOCUMENT_CATEGORIES.map((c) => (
+                      <option key={c.value} value={c.value}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div>
                   <label className="mb-1 block text-sm text-slate-400 light:text-slate-600">Title</label>
                   <input
@@ -170,14 +194,43 @@ export default function AdminPage() {
             </section>
 
             <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6 light:border-slate-200 light:bg-white">
-              <h2 className="mb-4 text-lg font-semibold text-slate-100 light:text-slate-900">Sabhi Judgments ({judgments.length})</h2>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <h2 className="text-lg font-semibold text-slate-100 light:text-slate-900">Sabhi Documents ({filteredJudgments.length})</h2>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setFilter("all")}
+                    className={
+                      "rounded-full px-3 py-1 text-xs font-medium transition " +
+                      (filter === "all"
+                        ? "bg-amber-500 text-slate-950"
+                        : "bg-slate-800 text-slate-300 hover:bg-slate-700 light:bg-slate-100 light:text-slate-700")
+                    }
+                  >
+                    All
+                  </button>
+                  {DOCUMENT_CATEGORIES.map((c) => (
+                    <button
+                      key={c.value}
+                      onClick={() => setFilter(c.value)}
+                      className={
+                        "rounded-full px-3 py-1 text-xs font-medium transition " +
+                        (filter === c.value
+                          ? "bg-amber-500 text-slate-950"
+                          : "bg-slate-800 text-slate-300 hover:bg-slate-700 light:bg-slate-100 light:text-slate-700")
+                      }
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
               {loading ? (
                 <p className="text-sm text-slate-400">Load ho raha hai...</p>
-              ) : judgments.length === 0 ? (
-                <p className="text-sm text-slate-400">Abhi tak koi judgment upload nahi hui.</p>
+              ) : filteredJudgments.length === 0 ? (
+                <p className="text-sm text-slate-400">Is category mein abhi tak koi document upload nahi hui.</p>
               ) : (
                 <ul className="space-y-2">
-                  {judgments.map((j) => (
+                  {filteredJudgments.map((j) => (
                     <li
                       key={j.id}
                       className="flex items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2.5 light:border-slate-200 light:bg-slate-50"
@@ -188,6 +241,9 @@ export default function AdminPage() {
                       >
                         <FileText className="h-4 w-4 shrink-0 text-amber-400" />
                         <span className="truncate">
+                          <span className="mr-2 rounded bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-300">
+                            {categoryLabel(j.category)}
+                          </span>
                           {j.title}
                           <span className="ml-2 text-xs text-slate-500">{formatSize(j.fileSize)}</span>
                         </span>

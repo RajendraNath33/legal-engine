@@ -4,6 +4,7 @@ import { judgmentPdfs } from "@/db/schema";
 import { desc } from "drizzle-orm";
 import { requireAdminFromRequest, requireUserFromRequest } from "@/lib/admin-auth";
 import { saveJudgmentFile } from "@/lib/judgment-storage";
+import { DOCUMENT_CATEGORIES } from "@/lib/document-categories";
 
 export async function GET(request: NextRequest) {
   const auth = await requireUserFromRequest(request);
@@ -15,6 +16,7 @@ export async function GET(request: NextRequest) {
     .select({
       id: judgmentPdfs.id,
       title: judgmentPdfs.title,
+      category: judgmentPdfs.category,
       fileName: judgmentPdfs.fileName,
       fileSize: judgmentPdfs.fileSize,
       createdAt: judgmentPdfs.createdAt,
@@ -34,6 +36,12 @@ export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const file = formData.get("file");
   const title = formData.get("title");
+  const categoryRaw = formData.get("category");
+  const validCategories = DOCUMENT_CATEGORIES.map((c) => c.value);
+  const category =
+    typeof categoryRaw === "string" && (validCategories as string[]).includes(categoryRaw)
+      ? categoryRaw
+      : "judgment";
 
   if (!(file instanceof File) || typeof title !== "string" || !title.trim()) {
     return NextResponse.json({ error: "file and title are required" }, { status: 400 });
@@ -68,6 +76,7 @@ export async function POST(request: NextRequest) {
     .insert(judgmentPdfs)
     .values({
       title: title.trim(),
+      category,
       fileName: file.name,
       storagePath,
       fileSize: file.size,
